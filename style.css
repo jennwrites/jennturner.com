@@ -3,13 +3,17 @@
    ========================================================================== */
 :root {
   /* Colors */
-  --clr-primary: #0066cc;
-  --clr-secondary: #1a1a1a;
-  --clr-bg: #f8f9fa;
-  --clr-surface: #ffffff;
-  --clr-text: #2d3748;
-  --clr-text-light: #718096;
-  --clr-border: #e2e8f0;
+  --clr-bg: #000000;           /* Pitch Black background */
+  --clr-surface: #121212;      /* Deep Charcoal for cards/containers */
+  --clr-border: #2d2d2d;       /* Dark gray for subtle dividers */
+  
+  --clr-primary: #b388ff;      /* Bright Pastel Violet (Passes 4.5:1 against #000000) */
+  --clr-secondary: #69f0ae;    /* Vibrant Mint Green for contrast/accents */
+  
+  --clr-text: #f3f4f6;         /* Off-White for high-readability body text */
+  --clr-text-light: #9ca3af;   /* Muted Gray for captions and secondary text */
+}
+
 
   /* Typography */
   --ff-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
