@@ -131,13 +131,13 @@ code {
   background-color: #ffffff;
   width: 220px;
   height: 147px;
-  object-fit: cover;
   display: block;
   padding: 12px 12px 40px 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
   transform: rotate(-3deg);
   transition: transform 0.2s ease;
+  overflow: hidden;
 }
 
 .instax-frame:hover {
@@ -146,8 +146,9 @@ code {
 
 .instax-frame img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
 }
 
 
