@@ -117,7 +117,7 @@ code {
   width: 220px;
   height: 147px;      /* Forces the standard Instax height */
   object-fit: cover;  /* Crops the image to fit perfectly without stretching */
-  display: block;
+  display: grid;
   padding: 12px 12px 40px 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
