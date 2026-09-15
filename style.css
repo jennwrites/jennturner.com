@@ -65,7 +65,7 @@ img, picture {
 }
 
 /* ==========================================================================
-   3. BASE TYPOGRAPHY
+   3. BASE TYPOGRAPHY - MOBILE FIRST
    ========================================================================== */
 h1, h2, h3, h4 {
   color: var(--clr-secondary);
@@ -74,9 +74,17 @@ h1, h2, h3, h4 {
   margin-bottom: 1rem;
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; margin-top: 2rem; }
-h3 { font-size: 1.5rem; margin-top: 1.5rem; }
+/* Mobile sizes */
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.5rem; margin-top: 1.5rem; }
+h3 { font-size: 1.25rem; margin-top: 1rem; }
+
+/* Tablet and desktop sizes */
+@media (min-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; margin-top: 2rem; }
+  h3 { font-size: 1.5rem; margin-top: 1.5rem; }
+}
 
 p {
    color: var(--clr-text);
@@ -103,6 +111,20 @@ code {
 /* ==========================================================================
    4. LAYOUT COMPONENTS
    ========================================================================== */
+header {
+  padding: 1.5rem 1rem;
+}
+
+@media (min-width: 768px) {
+  header {
+    padding: 2rem 1rem;
+  }
+}
+
+main {
+  padding: 0 1rem 1rem 1rem;
+}
+
 .container {
   width: 90%;
   max-width: var(--max-width);
@@ -110,15 +132,32 @@ code {
   padding-inline: 1rem;
 }
 
+/* Mobile-first grid: single column, expands on larger screens */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   width: 90%;
   max-width: var(--max-width);
   margin-inline: auto;
   padding-inline: 1rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
 }
 
 .grid-col {
@@ -127,21 +166,26 @@ code {
   align-items: center;
 }
 
+/* Instax frames - responsive sizing */
 .instax-frame {
   background-color: #ffffff;
-  width: 220px;
-  height: 293px;
-  display: block;
-  padding: 12px 12px 40px 12px;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  aspect-ratio: 220 / 293;
+  padding: 8px 8px 30px 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
   transform: rotate(-3deg);
   transition: transform 0.2s ease;
   overflow: hidden;
+  margin: 0 auto;
 }
 
-.instax-frame:hover {
-  transform: rotate(0deg) scale(1.02);
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .instax-frame:hover {
+    transform: rotate(0deg) scale(1.02);
+  }
 }
 
 .instax-frame img {
@@ -151,86 +195,117 @@ code {
   object-fit: cover;
 }
 
-/* --- THREE COLUMN LAYOUT GRID --- */
+/* Card container - responsive layout */
 .card-container {
   display: grid;
-  grid-template-columns: 1fr; /* 1 column on mobile screens */
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  justify-items: center; /* Centers the cards horizontally inside the columns */
+  justify-items: center;
+  padding: 0 1rem;
 }
 
-/* Snaps to 3 equal columns on tablet and desktop */
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .card-container {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 }
 
-/* --- THE PREVIEW CARDS --- */
+@media (min-width: 1024px) {
+  .card-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 0;
+  }
+}
+
+/* Preview cards - responsive sizing */
 .preview-card {
   position: relative;
   display: block;
-  
-  /* 📐 ENFORCES YOUR SPECIFIC DIMENSIONS */
-  width: 220px;
-  height: 293px;
-  
-  border-radius: 8px; /* Smooth, modern rounded corners */
-  overflow: hidden; /* Keeps the image inside the rounded corners */
-  text-decoration: none; /* Removes automatic link underlines */
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  aspect-ratio: 220 / 293;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: transform 0.3s ease;
+  margin: 0 auto;
 }
 
-/* Subtle lift effect when hovering over the card */
-.preview-card:hover {
-  transform: translateY(-5px);
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .preview-card:hover {
+    transform: translateY(-5px);
+  }
 }
 
-/* The Background Preview Image */
+/* Background preview image */
 .card-bg-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Keeps image from stretching */
+  object-fit: cover;
 }
 
-/* --- THE SOLID COLOR OVERLAY (DEFAULT STATE) --- */
+/* Overlay effect */
 .card-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  
-  /* 🎨 SET YOUR CHOSEN SOLID BLOCK COLOR HERE */
-  background-color: #b388ff; 
-  color: #ffffff; /* Text color */
-  
-  /* Centers your text vertically and horizontally inside the card */
+  background-color: #b388ff;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
   text-align: center;
   box-sizing: border-box;
-  
   transition: background-color 0.4s ease;
 }
 
-/* --- THE REVEAL EFFECT (HOVER STATE) --- */
-.preview-card:hover .card-overlay {
-  /* Fades the solid block color to a dark, semi-transparent tint.
-     This shows the photo clearly while keeping white text legible. */
-  background-color: rgba(0, 0, 0, 0.4); 
+.card-overlay p {
+  margin: 0;
+  font-size: 0.95rem;
 }
 
+@media (min-width: 768px) {
+  .card-overlay p {
+    font-size: 1rem;
+  }
+}
+
+.preview-card:hover .card-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+}
 
 /* ==========================================================================
-   5. BASIC INTERACTIVE ELEMENTS (Buttons & Forms)
+   5. LIST STYLING
+   ========================================================================== */
+ul, li {
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.8;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  li {
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   6. BASIC INTERACTIVE ELEMENTS (Buttons & Forms)
    ========================================================================== */
 .btn {
   display: inline-block;
@@ -269,7 +344,7 @@ textarea:focus {
 }
 
 /* ==========================================================================
-   6. UTILITY CLASSES
+   7. UTILITY CLASSES
    ========================================================================== */
 .text-center { text-align: center; }
 .text-muted { color: var(--clr-text-light); }
