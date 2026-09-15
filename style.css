@@ -166,20 +166,57 @@ main {
   align-items: center;
 }
 
-/* Instax frames - responsive sizing */
+/* Instax frames - responsive sizing
+
+   Fix summary (why and what):
+   - Some rotated frames were visually clipped (white border missing) because their rotated corners extended
+     outside ancestor boxes that used overflow:hidden. To make the white frame border robust against ancestor
+     clipping we:
+     1) Draw the white "frame" as an inset stroke (box-shadow inset) so it sits inside the element box and
+        cannot be clipped by ancestors.
+     2) Adjust transform-origin/transform-box to reduce excess overflow and improve rendering on iOS.
+     3) Provide a progressive enhancement using :has() to set overflow:visible on common ancestors when they
+        contain .instax-frame (modern browsers / iOS Safari). Also keep the image fill behavior intact.
+*/
 .instax-frame {
   background-color: #ffffff;
   width: 100%;
   max-width: min(220px, 100% - 1rem);
   height: auto;
   aspect-ratio: 220 / 293;
-  padding: 8px 8px 30px 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  /* keep inner spacing but make the visual white frame stable via an inset stroke */
+  padding: 10px 10px 34px 10px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18), inset 0 0 0 6px #fff;
   border-radius: 2px;
   transform: rotate(-3deg);
   transition: transform 0.2s ease;
+  /* rendering improvements for transforms on some mobile browsers */
+  -webkit-transform-box: fill-box;
+  transform-box: fill-box;
+  transform-origin: center center;
+  will-change: transform;
+  /* keep overflow hidden to constrain the inner image, but the visual white border is drawn inset so it won't be clipped by ancestors */
   overflow: hidden;
   margin: 0 auto;
+}
+
+/* Use :has(...) to avoid globally changing overflow on components; modern browsers (including recent iOS Safari)
+   support :has(), and this will make the direct ancestors allow rotated children to show without clipping.
+   Also provide a manual helper class `.unclipped` for older browsers or server-side rendering where :has is not available. */
+.preview-card:has(.instax-frame),
+.grid-col:has(.instax-frame),
+.card-container:has(.instax-frame),
+.grid-container:has(.instax-frame) {
+  overflow: visible;
+}
+
+/* Fallback manual class if :has() is not supported. Add the `unclipped` class to the parent element in markup
+   where necessary (e.g. <div class="preview-card unclipped">). */
+.preview-card.unclipped,
+.grid-col.unclipped,
+.card-container.unclipped,
+.grid-container.unclipped {
+  overflow: visible;
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
@@ -193,6 +230,9 @@ main {
   height: 100%;
   display: block;
   object-fit: cover;
+  /* prefer the top of the image to remain visible so the white frame doesn't appear to cut into faces */
+  object-position: top center;
+  border-radius: 2px;
 }
 
 /* Card container - responsive layout */
