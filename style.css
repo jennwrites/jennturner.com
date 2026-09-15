@@ -198,6 +198,8 @@ main {
   /* keep overflow hidden to constrain the inner image, but the visual white border is drawn inset so it won't be clipped by ancestors */
   overflow: hidden;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 /* Use :has(...) to avoid globally changing overflow on components; modern browsers (including recent iOS Safari)
@@ -217,6 +219,19 @@ main {
 .card-container.unclipped,
 .grid-container.unclipped {
   overflow: visible;
+}
+
+/* Mobile-specific fallback: make parents allow overflow on small viewports where you're seeing the clipping.
+   This is conservative and scoped to small screens to avoid layout changes on desktop. */
+@media (max-width: 767px) {
+  .preview-card,
+  .grid-col,
+  .card-container,
+  .grid-container {
+    overflow: visible !important;
+    /* breathing room so rotated frames don't overlap page chrome */
+    padding-bottom: 1.25rem;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
