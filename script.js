@@ -6,5 +6,5 @@ const randomNumber = Math.floor(Math.random() * totalFavicons) + 1;
 
 // 3. Target the link tag and swap the path
 const favicon = document.getElementById('dynamic-favicon');
-favicon.href = `favicons/favicon${randomNumber}.png`;
+favicon.href = `favicons/{randomNumber}.png`;
 
