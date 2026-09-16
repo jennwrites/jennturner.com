@@ -3,106 +3,174 @@
    ========================================================================== */
 :root {
   /* Colors */
-  --clr-bg: #000000;           /* Pitch Black background */
-  --clr-surface: #121212;      /* Deep Charcoal for cards/containers */
-  --clr-border: #2d2d2d;       /* Dark gray for subtle dividers */
-  
-  --clr-primary: #b388ff;      /* Bright Pastel Violet (Passes 4.5:1 against #000000) */
-  --clr-secondary: #69f0ae;    /* Vibrant Mint Green for contrast/accents */
-  
-  --clr-text: #f3f4f6;         /* Off-White for high-readability body text */
-  --clr-text-light: #9ca3af;   /* Muted Gray for captions and secondary text */
+  --clr-bg: #060608;            /* Near-black background */
+  --clr-surface: #16141d;       /* Elevated panel */
+  --clr-surface-2: #1d1a26;     /* Cards */
+  --clr-border: #322e3d;        /* Dividers (decorative only) */
+
+  --clr-primary: #b388ff;       /* Bright pastel violet accent (7.6:1 on bg) */
+  --clr-secondary: #69f0ae;     /* Vibrant mint accent (14.2:1 on bg) */
+  --clr-on-primary: #150a2e;    /* Dark text for use on violet backgrounds (7:1) */
+  --clr-on-secondary: #05170c;  /* Dark text for use on mint backgrounds (12.9:1) */
+
+  --clr-text: #f5f5f7;          /* Off-white body text */
+  --clr-text-light: #b6b4c2;    /* Muted lavender-gray for secondary text (9.9:1) */
 
   /* Typography */
-  --ff-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ff-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ff-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --ff-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  
+
   /* Layout & Spacing */
   --max-width: 1200px;
-  --radius: 6px;
+  --radius: 10px;
+  --radius-lg: 18px;
   --transition: all 0.2s ease-in-out;
 }
 
 /* ==========================================================================
    2. MODERN CSS RESET
    ========================================================================== */
-/* Box sizing rules */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* Remove default margins and paddings */
-body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul {
   margin: 0;
   padding: 0;
 }
 
-/* Set core root defaults */
 html {
   scroll-behavior: smooth;
 }
 
-/* Set core body defaults */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
   min-height: 100vh;
+  overflow-x: hidden;
   text-rendering: optimizeSpeed;
-  line-height: 1.6;
+  line-height: 1.65;
   font-family: var(--ff-sans);
+  font-size: 1.0625rem;
   color: var(--clr-text);
   background-color: var(--clr-bg);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Inherit fonts for inputs and buttons */
 input, button, textarea, select {
   font: inherit;
 }
 
-/* Make images easier to work with */
 img, picture {
   max-width: 100%;
   display: block;
+}
+
+/* Visible, high-contrast focus ring for keyboard users everywhere */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--clr-secondary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  background: var(--clr-secondary);
+  color: var(--clr-on-secondary);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }
 
 /* ==========================================================================
    3. BASE TYPOGRAPHY - MOBILE FIRST
    ========================================================================== */
 h1, h2, h3, h4 {
-  color: var(--clr-secondary);
-  line-height: 1.2;
+  font-family: var(--ff-display);
+  line-height: 1.15;
   font-weight: 700;
+  letter-spacing: -0.01em;
   margin-bottom: 1rem;
 }
 
-/* Mobile sizes */
-h1 { font-size: 1.75rem; }
-h2 { font-size: 1.5rem; margin-top: 1.5rem; }
-h3 { font-size: 1.25rem; margin-top: 1rem; }
+h1 { font-size: clamp(2.25rem, 6vw + 1rem, 3.75rem); }
 
-/* Tablet and desktop sizes */
-@media (min-width: 768px) {
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; margin-top: 2rem; }
-  h3 { font-size: 1.5rem; margin-top: 1.5rem; }
+h2 {
+  font-size: clamp(1.5rem, 3vw + 1rem, 2.25rem);
+  color: var(--clr-secondary);
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--clr-border);
+  position: relative;
 }
 
+h2::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 3.5rem;
+  height: 3px;
+  background: linear-gradient(90deg, var(--clr-primary), var(--clr-secondary));
+  border-radius: 2px;
+}
+
+h3 {
+  font-size: clamp(1.15rem, 1.2vw + 1rem, 1.4rem);
+  color: var(--clr-primary);
+  margin-top: 0;
+}
+
+.accent-primary { color: var(--clr-primary); }
+.accent-text { color: var(--clr-text); }
+
 p {
-   color: var(--clr-text);
-   margin-bottom: 1.25rem;
+  color: var(--clr-text);
+  max-width: 65ch;
+  margin-bottom: 1.25rem;
+}
+
+.lede {
+  font-size: clamp(1.05rem, 1vw + 0.9rem, 1.25rem);
+  color: var(--clr-text-light);
 }
 
 a {
   color: var(--clr-primary);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--clr-primary) 45%, transparent);
+  text-underline-offset: 3px;
+  font-weight: 600;
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration-color: var(--clr-primary);
 }
 
 code {
   font-family: var(--ff-mono);
-  background: var(--clr-border);
+  background: var(--clr-surface-2);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.9em;
@@ -111,52 +179,92 @@ code {
 /* ==========================================================================
    4. LAYOUT COMPONENTS
    ========================================================================== */
-header {
-  padding: 1.5rem 1rem;
+.wrap {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.hero {
+  position: relative;
+  padding-block: 2.5rem 1rem;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {
-  header {
-    padding: 2rem 1rem;
+  .hero {
+    padding-block: 4rem 2rem;
   }
+}
+
+.hero-glow {
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 26rem;
+  background:
+    radial-gradient(38rem 20rem at 15% 0%, color-mix(in srgb, var(--clr-primary) 22%, transparent), transparent 60%),
+    radial-gradient(32rem 18rem at 85% 10%, color-mix(in srgb, var(--clr-secondary) 16%, transparent), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero .wrap {
+  position: relative;
+  z-index: 1;
 }
 
 main {
-  padding: 0 1rem 1rem 1rem;
+  padding-block: 0.5rem 3rem;
 }
 
-.container {
-  width: 90%;
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: 1rem;
+/* Chip row */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  margin-bottom: 2.5rem;
 }
 
-/* Mobile-first grid: single column, expands on larger screens */
+.chip {
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+}
+
+.chip-primary {
+  background: var(--clr-primary);
+  color: var(--clr-on-primary);
+}
+
+.chip-secondary {
+  background: var(--clr-secondary);
+  color: var(--clr-on-secondary);
+}
+
+/* Photo grid: playful 2-up scrapbook on mobile, 4-up on larger screens */
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  width: 90%;
-  max-width: var(--max-width);
+  gap: 1.25rem;
+}
+
+.photo-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 32rem;
   margin-inline: auto;
-  padding-inline: 1rem;
-  margin-top: 1.5rem;
+  padding-block: 1.5rem 0.5rem;
 }
 
 @media (min-width: 640px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.75rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+  .photo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: none;
+    gap: 1.75rem;
   }
 }
 
@@ -164,95 +272,62 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 0;
 }
 
-/* Instax frames - responsive sizing
-
-   Fix summary (why and what):
-   - Some rotated frames were visually clipped (white border missing) because their rotated corners extended
-     outside ancestor boxes that used overflow:hidden. To make the white frame border robust against ancestor
-     clipping we:
-     1) Draw the white "frame" as an inset stroke (box-shadow inset) so it sits inside the element box and
-        cannot be clipped by ancestors.
-     2) Adjust transform-origin/transform-box to reduce excess overflow and improve rendering on iOS.
-     3) Provide a progressive enhancement using :has() to set overflow:visible on common ancestors when they
-        contain .instax-frame (modern browsers / iOS Safari). Also keep the image fill behavior intact.
-*/
+/* Instax-style polaroid frames */
 .instax-frame {
   background-color: #ffffff;
   width: 100%;
-  max-width: min(220px, 100% - 1rem);
-  height: auto;
+  max-width: 220px;
   aspect-ratio: 220 / 293;
-  /* keep inner spacing but make the visual white frame stable via an inset stroke */
-  padding: 10px 10px 34px 10px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18), inset 0 0 0 6px #fff;
-  border-radius: 2px;
-  transform: rotate(-3deg);
+  padding: 8px 8px 28px 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
   transition: transform 0.2s ease;
-  /* rendering improvements for transforms on some mobile browsers */
-  -webkit-transform-box: fill-box;
   transform-box: fill-box;
   transform-origin: center center;
-  will-change: transform;
-  /* keep overflow hidden to constrain the inner image, but the visual white border is drawn inset so it won't be clipped by ancestors */
-  overflow: hidden;
-  margin: 0 auto;
+  margin-inline: auto;
   position: relative;
-  z-index: 20;
 }
 
-/* Use :has(...) to avoid globally changing overflow on components; modern browsers (including recent iOS Safari)
-   support :has(), and this will make the direct ancestors allow rotated children to show without clipping.
-   Also provide a manual helper class `.unclipped` for older browsers or server-side rendering where :has is not available. */
-.preview-card:has(.instax-frame),
-.grid-col:has(.instax-frame),
-.card-container:has(.instax-frame),
-.grid-container:has(.instax-frame) {
-  overflow: visible;
-}
-
-/* Fallback manual class if :has() is not supported. Add the `unclipped` class to the parent element in markup
-   where necessary (e.g. <div class="preview-card unclipped">). */
-.preview-card.unclipped,
-.grid-col.unclipped,
-.card-container.unclipped,
-.grid-container.unclipped {
-  overflow: visible;
-}
-
-/* Mobile-specific fallback: make parents allow overflow on small viewports where you're seeing the clipping.
-   This is conservative and scoped to small screens to avoid layout changes on desktop. */
-@media (max-width: 767px) {
-  .preview-card,
-  .grid-col,
-  .card-container,
-  .grid-container {
-    overflow: visible !important;
-    /* breathing room so rotated frames don't overlap page chrome */
-    padding-bottom: 1.25rem;
-  }
-}
-
-/* Ensure instax frames render above following sections (like the "My skills" grid) on all viewports */
-main > .grid-container {
-  overflow: visible;
-}
+.instax-frame.rotate-a { transform: rotate(-3deg); }
+.instax-frame.rotate-b { transform: rotate(3deg); }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
   .instax-frame:hover {
-    transform: rotate(0deg) scale(1.02);
+    transform: rotate(0deg) scale(1.03);
   }
 }
 
 .instax-frame img {
   width: 100%;
   height: 100%;
-  display: block;
   object-fit: cover;
-  /* prefer the top of the image to remain visible so the white frame doesn't appear to cut into faces */
   object-position: top center;
   border-radius: 2px;
+}
+
+/* Skills grid */
+.skills-grid {
+  grid-template-columns: 1fr;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .skills-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.skill-card {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
 }
 
 /* Card container - responsive layout */
@@ -260,79 +335,65 @@ main > .grid-container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  justify-items: center;
-  padding: 0 1rem;
+  margin-top: 1.75rem;
 }
 
 @media (min-width: 640px) {
   .card-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1024px) {
   .card-container {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-/* Preview cards - responsive sizing */
 .preview-card {
   position: relative;
   display: block;
   width: 100%;
-  max-width: 220px;
-  height: auto;
   aspect-ratio: 220 / 293;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease;
-  margin: 0 auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid var(--clr-border);
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
   .preview-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
   }
 }
 
-/* Background preview image */
 .card-bg-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Overlay effect */
 .card-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #b388ff;
-  color: #ffffff;
+  inset: 0;
+  background-color: var(--clr-primary);
+  color: var(--clr-on-primary);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 1.25rem;
+  padding: 1.5rem;
   text-align: center;
-  box-sizing: border-box;
-  transition: background-color 0.4s ease;
+  transition: background-color 0.3s ease;
 }
 
 .card-overlay p {
   margin: 0;
+  color: inherit;
+  font-weight: 600;
   font-size: 0.95rem;
+  max-width: none;
 }
 
 @media (min-width: 768px) {
@@ -341,66 +402,93 @@ main > .grid-container {
   }
 }
 
-.preview-card:hover .card-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
+.preview-card:hover .card-overlay,
+.preview-card:focus-visible .card-overlay {
+  background-color: color-mix(in srgb, var(--clr-primary) 88%, black);
 }
+
+.resume-line {
+  margin-top: 1.75rem;
+}
+
+/* Fit / not-a-fit sections get a subtle colored left border to reinforce meaning with more than color alone */
+.fit-section {
+  border-left: 3px solid transparent;
+  padding-left: 1rem;
+  margin-left: -1rem;
+}
+
+.fit-yes { border-left-color: var(--clr-secondary); }
+.fit-no { border-left-color: var(--clr-border); }
 
 /* ==========================================================================
    5. LIST STYLING
    ========================================================================== */
 ul, li {
-  margin: 0;
-  padding-left: 1.5rem;
   line-height: 1.8;
 }
 
-li {
-  margin-bottom: 0.5rem;
+main ul {
+  padding-left: 1.4rem;
+}
+
+main li {
+  margin-bottom: 0.6rem;
+  max-width: 62ch;
+}
+
+.skill-card ul {
+  padding-left: 1.1rem;
 }
 
 @media (min-width: 768px) {
-  li {
+  main li {
     margin-bottom: 0.75rem;
   }
 }
 
 /* ==========================================================================
-   6. BASIC INTERACTIVE ELEMENTS (Buttons & Forms)
+   6. BUTTONS & FOOTER CTA
    ========================================================================== */
 .btn {
   display: inline-block;
   cursor: pointer;
-  padding: 0.75rem 1.5rem;
+  padding: 0.9rem 1.75rem;
   border: none;
   border-radius: var(--radius);
-  background-color: var(--clr-primary);
-  color: white;
-  font-weight: 600;
+  background-color: var(--clr-secondary);
+  color: var(--clr-on-secondary);
+  font-family: var(--ff-display);
+  font-weight: 700;
   text-align: center;
+  text-decoration: none;
   transition: var(--transition);
 }
 
 .btn:hover {
-  background-color: #0052a3;
+  background-color: color-mix(in srgb, var(--clr-secondary) 85%, white);
   text-decoration: none;
 }
 
-input[type="text"],
-input[type="email"],
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius);
-  background-color: var(--clr-surface);
-  margin-bottom: 1rem;
-  transition: var(--transition);
+.site-footer {
+  background: var(--clr-surface);
+  border-top: 1px solid var(--clr-border);
+  padding-block: 2.5rem;
+  text-align: center;
 }
 
-input:focus,
-textarea:focus {
-  outline: 2px solid var(--clr-primary);
-  outline-offset: -1px;
+.closing-statement {
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.5vw + 1rem, 1.5rem);
+  color: var(--clr-text);
+  max-width: 45ch;
+  margin-inline: auto;
+  margin-bottom: 1.5rem;
+}
+
+.btn-contact {
+  font-size: 1.05rem;
 }
 
 /* ==========================================================================
