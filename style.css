@@ -199,7 +199,7 @@ main {
   overflow: hidden;
   margin: 0 auto;
   position: relative;
-  z-index: 2;
+  z-index: 20;
 }
 
 /* Use :has(...) to avoid globally changing overflow on components; modern browsers (including recent iOS Safari)
@@ -232,10 +232,11 @@ main {
     /* breathing room so rotated frames don't overlap page chrome */
     padding-bottom: 1.25rem;
   }
+}
 
-  /* DEBUG: show outlines to identify the exact clipping ancestor and prevent visual clipping while we verify. */
-  * { outline: 1px solid rgba(255,0,0,0.06); }
-  header, main, .container { overflow: visible !important; }
+/* Ensure instax frames render above following sections (like the "My skills" grid) on all viewports */
+main > .grid-container {
+  overflow: visible;
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
