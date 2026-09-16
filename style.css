@@ -168,8 +168,15 @@ main {
 
 /* Instax frames - responsive sizing
 
-   Change: rotate the inner image instead of the frame container.
-   Rotating the image keeps the white frame axis-aligned so ancestors can't clip the visible border.
+   Fix summary (why and what):
+   - Some rotated frames were visually clipped (white border missing) because their rotated corners extended
+     outside ancestor boxes that used overflow:hidden. To make the white frame border robust against ancestor
+     clipping we:
+     1) Draw the white "frame" as an inset stroke (box-shadow inset) so it sits inside the element box and
+        cannot be clipped by ancestors.
+     2) Adjust transform-origin/transform-box to reduce excess overflow and improve rendering on iOS.
+     3) Provide a progressive enhancement using :has() to set overflow:visible on common ancestors when they
+        contain .instax-frame (modern browsers / iOS Safari). Also keep the image fill behavior intact.
 */
 .instax-frame {
   background-color: #ffffff;
@@ -177,45 +184,27 @@ main {
   max-width: min(220px, 100% - 1rem);
   height: auto;
   aspect-ratio: 220 / 293;
-  /* inner spacing remains for the look of an instax print */
+  /* keep inner spacing but make the visual white frame stable via an inset stroke */
   padding: 10px 10px 34px 10px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18), inset 0 0 0 6px #fff;
   border-radius: 2px;
-  /* remove container rotation - rotate the image instead */
-  transform: none;
+  transform: rotate(-3deg);
   transition: transform 0.2s ease;
+  /* rendering improvements for transforms on some mobile browsers */
   -webkit-transform-box: fill-box;
   transform-box: fill-box;
   transform-origin: center center;
   will-change: transform;
-  overflow: hidden; /* keep image contained inside the white frame */
+  /* keep overflow hidden to constrain the inner image, but the visual white border is drawn inset so it won't be clipped by ancestors */
+  overflow: hidden;
   margin: 0 auto;
   position: relative;
-  z-index: 20; /* keep above following content */
+  z-index: 20;
 }
 
-/* Rotate the image itself to create the tilted-photo effect.  Hover restores to upright and slightly scales. */
-.instax-frame img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: top center;
-  border-radius: 2px;
-  transform: rotate(-3deg);
-  transform-origin: center center;
-  transition: transform 0.25s ease;
-  will-change: transform;
-}
-
-/* Hover interaction: un-tilt the photo and slightly scale up the image */
-@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
-  .instax-frame:hover img {
-    transform: rotate(0deg) scale(1.02);
-  }
-}
-
-/* Allow ancestors that might clip rotated children to be visible where necessary */
+/* Use :has(...) to avoid globally changing overflow on components; modern browsers (including recent iOS Safari)
+   support :has(), and this will make the direct ancestors allow rotated children to show without clipping.
+   Also provide a manual helper class `.unclipped` for older browsers or server-side rendering where :has is not available. */
 .preview-card:has(.instax-frame),
 .grid-col:has(.instax-frame),
 .card-container:has(.instax-frame),
@@ -223,7 +212,8 @@ main {
   overflow: visible;
 }
 
-/* Fallback manual class for older browsers */
+/* Fallback manual class if :has() is not supported. Add the `unclipped` class to the parent element in markup
+   where necessary (e.g. <div class="preview-card unclipped">). */
 .preview-card.unclipped,
 .grid-col.unclipped,
 .card-container.unclipped,
@@ -231,9 +221,38 @@ main {
   overflow: visible;
 }
 
-/* Ensure the main grid under the header doesn't clip rotated visuals */
+/* Mobile-specific fallback: make parents allow overflow on small viewports where you're seeing the clipping.
+   This is conservative and scoped to small screens to avoid layout changes on desktop. */
+@media (max-width: 767px) {
+  .preview-card,
+  .grid-col,
+  .card-container,
+  .grid-container {
+    overflow: visible !important;
+    /* breathing room so rotated frames don't overlap page chrome */
+    padding-bottom: 1.25rem;
+  }
+}
+
+/* Ensure instax frames render above following sections (like the "My skills" grid) on all viewports */
 main > .grid-container {
   overflow: visible;
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .instax-frame:hover {
+    transform: rotate(0deg) scale(1.02);
+  }
+}
+
+.instax-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  /* prefer the top of the image to remain visible so the white frame doesn't appear to cut into faces */
+  object-position: top center;
+  border-radius: 2px;
 }
 
 /* Card container - responsive layout */
