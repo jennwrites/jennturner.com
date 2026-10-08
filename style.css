@@ -407,10 +407,11 @@ main {
 .cred-photo {
   width: 100%;
   height: auto;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 2 / 1;
   object-fit: cover;
+  object-position: center 40%;
   border-radius: var(--radius);
-  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .cred-link a {
