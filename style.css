@@ -404,6 +404,15 @@ main {
   color: var(--clr-text-light);
 }
 
+.cred-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-top: 0.5rem;
+}
+
 .cred-link a {
   color: var(--accent);
 }
